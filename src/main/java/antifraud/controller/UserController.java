@@ -7,12 +7,11 @@ import jakarta.validation.Valid;
 import jakarta.validation.constraints.NotEmpty;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
-import org.springframework.security.core.annotation.AuthenticationPrincipal;
-import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 @RestController
+@CrossOrigin
 @RequestMapping("/api/auth")
 public class UserController {
 
@@ -20,16 +19,20 @@ public class UserController {
     UserDetailsServiceImpl userService;
 
     @DeleteMapping("/user/{username}")
-    public UserStatusResponse deleteUser(@PathVariable String username, @AuthenticationPrincipal UserDetails user) {
+    public UserStatusResponse deleteUser(@PathVariable String username) {
         return new UserStatusResponse(username, userService.deleteUser(username) ? "Deleted successfully!" : "Deletion failed.");
     }
 
-    @CrossOrigin
     @PostMapping("/user")
+    @CrossOrigin()
     @ResponseStatus(HttpStatus.CREATED)
     public UserResponse registerUser(@Valid @RequestBody NewUserRequest request) {
         return UserResponse.fromUser(userService.createUser(request.name(), request.username(), request.password()));
     }
+
+    @GetMapping("/cred")
+    @CrossOrigin(origins = "http://127.0.0.1:4200", allowCredentials = "true")
+    public void checkCreds() {}
 
     @GetMapping("/list")
     public List<UserResponse> getUsers() {
