@@ -7,11 +7,13 @@ import jakarta.validation.Valid;
 import jakarta.validation.constraints.NotEmpty;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 @RestController
-@CrossOrigin
+@CrossOrigin("http://localhost:4200")
 @RequestMapping("/api/auth")
 public class UserController {
 
@@ -24,15 +26,15 @@ public class UserController {
     }
 
     @PostMapping("/user")
-    @CrossOrigin()
     @ResponseStatus(HttpStatus.CREATED)
     public UserResponse registerUser(@Valid @RequestBody NewUserRequest request) {
         return UserResponse.fromUser(userService.createUser(request.name(), request.username(), request.password()));
     }
 
     @GetMapping("/cred")
-    @CrossOrigin(origins = "http://127.0.0.1:4200", allowCredentials = "true")
-    public void checkCreds() {}
+    public UserResponse checkCreds(@AuthenticationPrincipal UserDetails user) {
+        return UserResponse.fromUser(userService.findUser(user.getUsername()));
+    }
 
     @GetMapping("/list")
     public List<UserResponse> getUsers() {

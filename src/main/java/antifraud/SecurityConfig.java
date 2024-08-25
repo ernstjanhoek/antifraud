@@ -47,7 +47,7 @@ public class SecurityConfig {
                         .requestMatchers("/actuator/shutdown").permitAll()
                         .requestMatchers("/api/auth/user").permitAll()
                         .requestMatchers("/error").permitAll()
-                        .requestMatchers(("/api/auth/cred")).authenticated()
+                        .requestMatchers(HttpMethod.GET, "/api/auth/cred").authenticated()
                         .requestMatchers(HttpMethod.POST, "/api/antifraud/transaction").hasAnyAuthority("MERCHANT")
                         .requestMatchers(HttpMethod.PUT, "/api/antifraud/transaction").hasAnyAuthority("SUPPORT")
                         .requestMatchers("/api/antifraud/history/**").hasAnyAuthority("SUPPORT")
@@ -79,16 +79,5 @@ public class SecurityConfig {
                              AuthenticationException authException) throws IOException, ServletException {
             response.sendError(HttpServletResponse.SC_UNAUTHORIZED, authException.getMessage());
         }
-    }
-
-    @Bean
-    CorsConfigurationSource corsConfigurationSource() {
-        CorsConfiguration configuration = new CorsConfiguration();
-        configuration.setAllowedOrigins(Arrays.asList("http://127.0.0.1:4200", "http://localhost:4200"));
-        configuration.setAllowedMethods(Arrays.asList("GET","PUT", "POST", "DELETE", "OPTIONS"));
-        configuration.setAllowCredentials(true);
-        UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
-        source.registerCorsConfiguration("/**", configuration);
-        return source;
     }
 }
