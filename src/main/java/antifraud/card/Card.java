@@ -1,6 +1,7 @@
 package antifraud.card;
 
 import antifraud.transaction.Transaction;
+import antifraud.transaction.Validated;
 import jakarta.persistence.*;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -22,7 +23,7 @@ public class Card {
     private int manualLimit;
 
     @OneToMany(mappedBy = "card", cascade = CascadeType.ALL)
-    private List<Transaction> transaction;
+    private List<Transaction<Validated>> transaction;
 
     public Card(String number) {
         this.cardNumber = number;

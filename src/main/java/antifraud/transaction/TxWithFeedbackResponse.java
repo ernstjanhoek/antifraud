@@ -12,7 +12,7 @@ public record TxWithFeedbackResponse(
         TransactionStatus result,
         String feedback) {
 
-    static public TxWithFeedbackResponse fromTransaction(Transaction tx) {
+    static public TxWithFeedbackResponse fromTransaction(Transaction<?> tx) {
         String feedback;
 
         if (tx.getFeedback() == null) {
