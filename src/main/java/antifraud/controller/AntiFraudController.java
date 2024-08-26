@@ -18,6 +18,7 @@ import java.util.List;
 
 @RestController
 @Validated
+@CrossOrigin("http://localhost:4200")
 @RequestMapping("/api/antifraud")
 public class AntiFraudController {
     @Autowired

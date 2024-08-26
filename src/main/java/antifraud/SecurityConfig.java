@@ -45,7 +45,6 @@ public class SecurityConfig {
                 .authorizeHttpRequests(requests -> requests
                         .requestMatchers("/api/auth/user").permitAll()
                         .requestMatchers("/actuator/shutdown").permitAll()
-                        .requestMatchers("/api/auth/user").permitAll()
                         .requestMatchers("/error").permitAll()
                         .requestMatchers(HttpMethod.GET, "/api/auth/cred").authenticated()
                         .requestMatchers(HttpMethod.POST, "/api/antifraud/transaction").hasAnyAuthority("MERCHANT")
